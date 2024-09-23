@@ -39,6 +39,9 @@ const DBConnect: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.post('http://10.223.24.242:9090/v1/test-connection', formData);
+
+      setSqlStatus(null);
+      setSqlError(null);
       
       if (response.data === true) {
         setDbStatus("Connected");
@@ -56,6 +59,7 @@ const DBConnect: React.FC = () => {
       setDbError('Failed to connect to the database.');
       setIsConnected(false);
       setDbStatus(null);
+      setSqlStatus(null);
     }
   };
   
@@ -85,7 +89,7 @@ const DBConnect: React.FC = () => {
           <div className={styleClasses.inputField}>
             <TextInput
               label="Host"
-              placeholder="Enter host"
+              placeholder="Enter Host"
               name="host"
               value={formData.host}
               onChange={handleChange}
@@ -96,7 +100,7 @@ const DBConnect: React.FC = () => {
           <div className={styleClasses.inputField}>
             <TextInput
               label="User"
-              placeholder="Enter user"
+              placeholder="Enter User"
               name="user"
               value={formData.user}
               onChange={handleChange}
@@ -107,7 +111,7 @@ const DBConnect: React.FC = () => {
           <div className={styleClasses.inputField}>
             <TextInput
               label="Database Name"
-              placeholder="Enter database name"
+              placeholder="Enter Database Name"
               name="database"
               value={formData.database}
               onChange={handleChange}
@@ -118,7 +122,7 @@ const DBConnect: React.FC = () => {
           <div className={styleClasses.inputField}>
             <TextInput
               label="Password"
-              placeholder="Enter password"
+              placeholder="Enter Password"
               name="password"
               type="password"
               value={formData.password}
@@ -130,7 +134,7 @@ const DBConnect: React.FC = () => {
           <div className={styleClasses.inputField}>
             <TextInput
               label="Port"
-              placeholder="Enter port"
+              placeholder="Enter Port"
               name="port"
               value={formData.port}
               onChange={handleChange}
@@ -154,9 +158,9 @@ const DBConnect: React.FC = () => {
           <form className={styleClasses.form} onSubmit={handleGenerateSQL}>
             <div className={styleClasses.sqlQuerySection}>
               <div className={styleClasses.inputField}>
-                <label>Enter your question:</label>
+                <label>Enter Your Question:</label>
                 <Textarea
-                  placeholder="Type your question here"
+                  placeholder="Type Your Question Here"
                   value={question}
                   onChange={handleQuestionChange}
                   required
@@ -173,10 +177,12 @@ const DBConnect: React.FC = () => {
         {/* Display SQL query response */}
         {isConnected && response && (
           <div className={styleClasses.sqlQuerySection}>
-            <div className={styleClasses.inputField}>
-              <label>Generated SQL Query Output:</label>
-              <Textarea value={response.replace('<|eot_id|>', '')} readOnly />
-            </div>
+            <form className={styleClasses.form}>
+              <div className={styleClasses.inputField}>
+                <label>Generated SQL Query Output:</label>
+                <Textarea value={response.replace('<|eot_id|>', '')} readOnly />
+              </div>
+            </form>
           </div>
         )}
 

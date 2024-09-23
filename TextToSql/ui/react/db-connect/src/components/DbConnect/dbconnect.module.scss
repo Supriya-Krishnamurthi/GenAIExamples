@@ -31,13 +31,12 @@
     }
   }
 
-  .form, .textToSQLForm {
+  .form {
     width: 100%;
     margin-bottom: 20px;
 
     .inputField {
       margin-bottom: 15px;
-      margin-right: 20px;
 
       label {
         font-size: 1.1rem;
@@ -88,6 +87,7 @@
   .error {
     font-size: 1.1rem;
     margin-top: 10px;
+    font-weight: 500;
   }
 
   .status {
@@ -118,7 +118,7 @@
       border-radius: 4px;
       font-size: 1rem;
       resize: vertical;
-      min-height: 170px;
+      min-height: 165px;
       box-sizing: border-box;
     }
   }
