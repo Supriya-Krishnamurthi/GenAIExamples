@@ -2,19 +2,25 @@
 
 ## 📸 Project Screenshots
 
-- Initial Page
+Initial Page
 ![project-screenshot](../../assets/img/textToSql_ui_init.png)
-- Enter DB credentials and connect to DB
+
+Enter DB credentials and connect to DB
 ![project-screenshot](../../assets/img/textToSql_ui_db_credentials.png)
-- DB connection failed
+
+DB connection failed
 ![project-screenshot](../../assets/img/textToSql_ui_failed_db_connection.png)
-- DB connection successful
+
+DB connection successful
 ![project-screenshot](../../assets/img/textToSql_ui_successful_db_connection.png)
-- Enter user question
+
+Enter user question
 ![project-screenshot](../../assets/img/textToSql_ui_enter_question.png)
-- SQL query generation failed
+
+SQL query generation failed
 ![project-screenshot](../../assets/img/textToSql_ui_failed_sql_output_generation.png)
-- SQL query generation successful
+
+SQL query generation successful
 ![project-screenshot](../../assets/img/textToSql_ui_succesful_sql_output_generation.png)
 
 ## 🧐 Features
