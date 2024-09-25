@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Button, Text, TextInput, Title, Textarea } from '@mantine/core';
+import { TEXT_TO_SQL_URL } from '../../config';
 // import { notifications } from '@mantine/notifications';
 import styleClasses from './dbconnect.module.scss'; // Importing the SCSS file
 
 const DBConnect: React.FC = () => {
   const [formData, setFormData] = useState({
-    user: 'testuser',
+    user: 'postgres',
     database: 'chinook',
-    host: '10.223.22.141',
+    host: '10.223.24.242',
     password: 'testpwd',
-    port: '5432',
+    port: '5442',
   });
 
   const [dbStatus, setDbStatus] = useState<string | null>(null);
@@ -18,7 +19,8 @@ const DBConnect: React.FC = () => {
   const [dberror, setDbError] = useState<string | null>(null);
   const [sqlerror, setSqlError] = useState<string | null>(null);
   const [question, setQuestion] = useState<string>('');
-  const [response, setResponse] = useState<string | null>(null);
+  const [sqlQuery, setSqlQuery] = useState<string | null>(null);
+  const [queryOutput, setQueryOutput] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   // Handle form input changes
@@ -38,17 +40,18 @@ const DBConnect: React.FC = () => {
   const handleDBConnect = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://10.223.24.242:9090/v1/test-connection', formData);
+      const api_response = await axios.post(`${TEXT_TO_SQL_URL}/test-connection`, formData);
 
       setSqlStatus(null);
       setSqlError(null);
       
-      if (response.data === true) {
+      if (api_response.data === true) {
         setDbStatus("Connected");
         setDbError(null);
         setIsConnected(true);
         setQuestion('');
-        setResponse(null);
+        setSqlQuery(null);
+        setQueryOutput(null);
       } else {
         setDbStatus(null);
         setIsConnected(false);
@@ -72,8 +75,11 @@ const DBConnect: React.FC = () => {
         conn_str: formData,
       };
 
-      const response = await axios.post('http://10.223.24.242:9090/v1/texttosql', payload);
-      setResponse(response.data.result.output); // Assuming the API returns an SQL query
+      let api_response: Record<string, any>;
+      api_response = await axios.post(`${TEXT_TO_SQL_URL}/texttosql`, payload);
+
+      setSqlQuery(api_response.data.result.sql); // Assuming the API returns an SQL query
+      setQueryOutput(api_response.data.result.output);
       setSqlError(null)
       setSqlStatus('SQL query output generated successfully')
     } catch (err) {
@@ -175,12 +181,14 @@ const DBConnect: React.FC = () => {
         )}
 
         {/* Display SQL query response */}
-        {isConnected && response && (
+        {isConnected && sqlQuery && queryOutput && (
           <div className={styleClasses.sqlQuerySection}>
             <form className={styleClasses.form}>
               <div className={styleClasses.inputField}>
+                <label>Generated SQL Query:</label>
+                <Textarea value={sqlQuery.replace('\n', '')} readOnly />
                 <label>Generated SQL Query Output:</label>
-                <Textarea value={response.replace('<|eot_id|>', '')} readOnly />
+                <Textarea value={queryOutput.replace('</s>', '')} readOnly />
               </div>
             </form>
           </div>
