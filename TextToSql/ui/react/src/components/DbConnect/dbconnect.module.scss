@@ -58,6 +58,11 @@
           outline: none;
         }
       }
+
+      .loader{
+        display: flex;
+        justify-content: center;
+      }
     }
 
     .submitButton {

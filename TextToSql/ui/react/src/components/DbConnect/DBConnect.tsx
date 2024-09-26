@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Button, Text, TextInput, Title, Textarea } from '@mantine/core';
+import { Button, Text, TextInput, Title, Textarea, Loader } from '@mantine/core';
 import { TEXT_TO_SQL_URL } from '../../config';
 // import { notifications } from '@mantine/notifications';
 import styleClasses from './dbconnect.module.scss'; // Importing the SCSS file
@@ -22,6 +22,7 @@ const DBConnect: React.FC = () => {
   const [sqlQuery, setSqlQuery] = useState<string | null>(null);
   const [queryOutput, setQueryOutput] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Handle form input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,13 +41,14 @@ const DBConnect: React.FC = () => {
   const handleDBConnect = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const api_response = await axios.post(`${TEXT_TO_SQL_URL}/test-connection`, formData);
+      let api_response: Record<string, any>;
+      api_response = await axios.post(`${TEXT_TO_SQL_URL}/postgres/health`, formData);
 
       setSqlStatus(null);
       setSqlError(null);
-      
-      if (api_response.data === true) {
-        setDbStatus("Connected");
+
+      if (api_response.data.status === 'success') {
+        setDbStatus(api_response.data.message);
         setDbError(null);
         setIsConnected(true);
         setQuestion('');
@@ -55,7 +57,7 @@ const DBConnect: React.FC = () => {
       } else {
         setDbStatus(null);
         setIsConnected(false);
-        setDbError('Failed to connect to the database.');
+        setDbError(api_response.data.message); //response would contain error message incase of failure
         setSqlStatus(null);
       }
     } catch (err) {
@@ -69,6 +71,7 @@ const DBConnect: React.FC = () => {
   // Handle generating SQL query
   const handleGenerateSQL = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const payload = {
         input_text: question,
@@ -84,6 +87,8 @@ const DBConnect: React.FC = () => {
       setSqlStatus('SQL query output generated successfully')
     } catch (err) {
       setSqlError('Failed to generate SQL query output.');
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -174,14 +179,14 @@ const DBConnect: React.FC = () => {
               </div>
             </div>
 
-            <Button type="submit" className={styleClasses.submitButton} fullWidth>
-              Generate SQL Query Output
+            <Button type="submit" className={styleClasses.submitButton} fullWidth disabled={isLoading}>
+            {isLoading ? <div className="loader-container"><Loader size="sm" /></div> : 'Generate SQL Query Output'}
             </Button>
           </form>
         )}
 
         {/* Display SQL query response */}
-        {isConnected && sqlQuery && queryOutput && (
+        {isConnected && sqlQuery && queryOutput && !isLoading && (
           <div className={styleClasses.sqlQuerySection}>
             <form className={styleClasses.form}>
               <div className={styleClasses.inputField}>
@@ -195,8 +200,8 @@ const DBConnect: React.FC = () => {
         )}
 
         {/* Display SQL generation status, error if any */}
-        {sqlStatus && <Text className={styleClasses.status}>Status: {sqlStatus}</Text>}
-        {sqlerror && <Text className={styleClasses.error}>Error: {sqlerror}</Text>}
+        {sqlStatus && !isLoading && <Text className={styleClasses.status}>Status: {sqlStatus}</Text>}
+        {sqlerror && !isLoading && <Text className={styleClasses.error}>Error: {sqlerror}</Text>}
 
       </div>
     </div>

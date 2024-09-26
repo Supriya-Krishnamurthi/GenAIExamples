@@ -17,7 +17,12 @@ export POSTGRES_PASSWORD=testpwd
 export POSTGRES_DB=chinook
 
 function build_docker_images() {
-    cd $WORKPATH
+    echo $WORKPATH
+    OPEAPATH=$(realpath "$WORKPATH/../..")
+    cd $OPEAPATH
+    git clone https://github.com/yogeshmpandey/GenAIComps.git
+    cd GenAIComps
+    echo $PWD
     docker build --no-cache -t opea/texttosql:comps -f comps/texttosql/langchain/Dockerfile .
 }
 
