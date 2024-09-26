@@ -6,9 +6,10 @@ set -xe
 
 WORKPATH=$(dirname "$PWD")
 LOG_PATH="$WORKPATH/tests"
-ip_address=$(hostname -I | awk '{print $1}')
+ip_address="10.223.24.242"
 tgi_port=8080
 tgi_volume=$WORKPATH/data
+HUGGINGFACEHUB_API_TOKEN="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"
 
 export model="mistralai/Mistral-7B-Instruct-v0.3"
 export HUGGINGFACEHUB_API_TOKEN=${HUGGINGFACEHUB_API_TOKEN}
@@ -20,7 +21,7 @@ function build_docker_images() {
     echo $WORKPATH
     OPEAPATH=$(realpath "$WORKPATH/../..")
     cd $OPEAPATH
-    git clone https://github.com/yogeshmpandey/GenAIComps.git
+    # git clone --branch texttosql https://github.com/yogeshmpandey/GenAIComps.git
     cd GenAIComps
     echo $PWD
     docker build --no-cache -t opea/texttosql:comps -f comps/texttosql/langchain/Dockerfile .
@@ -52,7 +53,8 @@ function start_service() {
 
 function validate_microservice() {
     texttosql_port=9090
-    result=$(http_proxy="" curl http://${ip_address}:${texttosql_port}/v1/texttosql\
+    echo "http://${ip_address}:${texttosql_port}/v1/texttosql"
+    result=$(http_proxy="" curl --connect-timeout 5 --max-time 120000 http://${ip_address}:${texttosql_port}/v1/texttosql\
         -X POST \
         -d '{"input_text": "Find the total number of Albums.","conn_str": {"user": "'${POSTGRES_USER}'","password": "'${POSTGRES_PASSWORD}'","host": "'${ip_address}'", "port": "5442", "database": "'${POSTGRES_DB}'" }}' \
         -H 'Content-Type: application/json')
@@ -74,7 +76,10 @@ function validate_frontend() {
     cd $WORKPATH/ui/react
     local conda_env_name="OPEA_e2e"
     export PATH=${HOME}/miniforge3/bin/:$PATH
+#    conda remove -n ${conda_env_name} --all -y
+    conda create -n ${conda_env_name} python=3.12 -y
 
+    conda info --envs
     source activate ${conda_env_name}
     echo "[ TEST INFO ]: --------- conda env activated ---------"
 
@@ -106,6 +111,7 @@ function main() {
     start_service
 
     validate_microservice
+    validate_frontend
 
     stop_docker
     echo y | docker system prune

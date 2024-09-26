@@ -1,0 +1,117 @@
+[2m2024-09-26T19:10:24.515699Z[0m [32m INFO[0m [2mtext_generation_launcher[0m[2m:[0m Args {
+    model_id: "mistralai/Mistral-7B-Instruct-v0.3",
+    revision: None,
+    validation_workers: 2,
+    sharded: None,
+    num_shard: None,
+    quantize: None,
+    speculate: None,
+    dtype: None,
+    trust_remote_code: false,
+    max_concurrent_requests: 128,
+    max_best_of: 2,
+    max_stop_sequences: 4,
+    max_top_n_tokens: 5,
+    max_input_tokens: None,
+    max_input_length: None,
+    max_total_tokens: None,
+    waiting_served_ratio: 0.3,
+    max_batch_prefill_tokens: None,
+    max_batch_total_tokens: None,
+    max_waiting_tokens: 20,
+    max_batch_size: None,
+    cuda_graphs: None,
+    hostname: "3c40c1ef5ccd",
+    port: 80,
+    shard_uds_path: "/tmp/text-generation-server",
+    master_addr: "localhost",
+    master_port: 29500,
+    huggingface_hub_cache: Some(
+        "/data",
+    ),
+    weights_cache_override: None,
+    disable_custom_kernels: false,
+    cuda_memory_fraction: 1.0,
+    rope_scaling: None,
+    rope_factor: None,
+    json_output: false,
+    otlp_endpoint: None,
+    otlp_service_name: "text-generation-inference.router",
+    cors_allow_origin: [],
+    watermark_gamma: None,
+    watermark_delta: None,
+    ngrok: false,
+    ngrok_authtoken: None,
+    ngrok_edge: None,
+    tokenizer_config_path: None,
+    disable_grammar_support: false,
+    env: false,
+    max_client_batch_size: 4,
+    lora_adapters: None,
+}
+[2m2024-09-26T19:10:24.516179Z[0m [32m INFO[0m [2mhf_hub[0m[2m:[0m Token file not found "/root/.cache/huggingface/token"    
+[2m2024-09-26T19:10:52.648378Z[0m [32m INFO[0m [2mtext_generation_launcher[0m[2m:[0m Default `max_input_tokens` to 4095
+[2m2024-09-26T19:10:52.648435Z[0m [32m INFO[0m [2mtext_generation_launcher[0m[2m:[0m Default `max_total_tokens` to 4096
+[2m2024-09-26T19:10:52.648441Z[0m [32m INFO[0m [2mtext_generation_launcher[0m[2m:[0m Default `max_batch_prefill_tokens` to 4145
+[2m2024-09-26T19:10:52.648447Z[0m [32m INFO[0m [2mtext_generation_launcher[0m[2m:[0m Using default cuda graphs [1, 2, 4, 8, 16, 32]
+[2m2024-09-26T19:10:52.648714Z[0m [32m INFO[0m [1mdownload[0m: [2mtext_generation_launcher[0m[2m:[0m Starting download process.
+[2m2024-09-26T19:10:54.247675Z[0m [32m INFO[0m [2mtext_generation_launcher[0m[2m:[0m Detected system cpu
+[2m2024-09-26T19:10:57.256596Z[0m [31mERROR[0m [1mdownload[0m: [2mtext_generation_launcher[0m[2m:[0m Download encountered an error: 
+The installed version of bitsandbytes was compiled without GPU support. 8-bit optimizers, 8-bit multiplication, and GPU quantization are unavailable.
+Traceback (most recent call last):
+
+  File "/opt/conda/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 304, in hf_raise_for_status
+    response.raise_for_status()
+
+  File "/opt/conda/lib/python3.10/site-packages/requests/models.py", line 1024, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3/resolve/main/config.json
+
+
+The above exception was the direct cause of the following exception:
+
+
+Traceback (most recent call last):
+
+  File "/opt/conda/bin/text-generation-server", line 8, in <module>
+    sys.exit(app())
+
+  File "/opt/conda/lib/python3.10/site-packages/text_generation_server/cli.py", line 186, in download_weights
+    config = hf_hub_download(
+
+  File "/opt/conda/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+
+  File "/opt/conda/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1221, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+
+  File "/opt/conda/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1325, in _hf_hub_download_to_cache_dir
+    _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+
+  File "/opt/conda/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1823, in _raise_on_head_call_error
+    raise head_call_error
+
+  File "/opt/conda/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1722, in _get_metadata_or_catch_error
+    metadata = get_hf_file_metadata(url=url, proxies=proxies, timeout=etag_timeout, headers=headers)
+
+  File "/opt/conda/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+
+  File "/opt/conda/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1645, in get_hf_file_metadata
+    r = _request_wrapper(
+
+  File "/opt/conda/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 372, in _request_wrapper
+    response = _request_wrapper(
+
+  File "/opt/conda/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 396, in _request_wrapper
+    hf_raise_for_status(response)
+
+  File "/opt/conda/lib/python3.10/site-packages/huggingface_hub/utils/_errors.py", line 321, in hf_raise_for_status
+    raise GatedRepoError(message, response) from e
+
+huggingface_hub.utils._errors.GatedRepoError: 401 Client Error. (Request ID: Root=1-66f5b1bb-2b92e2747b82607c0d6db92d;9392d60f-6f1f-4cbd-8cb2-fd0027b5914b)
+
+Cannot access gated repo for url https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3/resolve/main/config.json.
+Access to model mistralai/Mistral-7B-Instruct-v0.3 is restricted. You must have access to it and be authenticated to access it. Please log in.
+
