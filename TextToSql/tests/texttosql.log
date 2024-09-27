@@ -1,5 +1,0 @@
-Connection failed: (psycopg2.OperationalError) connection to server at "10.223.24.113", port 5442 failed: Connection refused
-	Is the server running on that host and accepting TCP/IP connections?
-
-(Background on this error at: https://sqlalche.me/e/20/e3q8)
-INFO:     10.223.24.113:60300 - "POST /v1/texttosql HTTP/1.1" 500 Internal Server Error
