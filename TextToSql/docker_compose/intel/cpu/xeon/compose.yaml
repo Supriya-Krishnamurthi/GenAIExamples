@@ -41,18 +41,18 @@ services:
       - TGI_LLM_ENDPOINT=${TGI_LLM_ENDPOINT}
 
   texttosql-xeon-react-ui-server:
-  image: ${REGISTRY:-opea}/texttosql-react-ui:${TAG:-latest}
-  container_name: texttosql-xeon-react-ui-server
-  depends_on:
-    - texttosql_service
-  ports:
-    - "5174:80"
-  environment:
-    - no_proxy=${no_proxy}
-    - https_proxy=${https_proxy}
-    - http_proxy=${http_proxy}
-  ipc: host
-  restart: always
+    image: ${REGISTRY:-opea}/texttosql-react-ui:${TAG:-latest}
+    container_name: texttosql-xeon-react-ui-server
+    depends_on:
+      - texttosql_service
+    ports:
+      - "5174:80"
+    environment:
+      - no_proxy=${no_proxy}
+      - https_proxy=${https_proxy}
+      - http_proxy=${http_proxy}
+    ipc: host
+    restart: always
 
 
 networks:
