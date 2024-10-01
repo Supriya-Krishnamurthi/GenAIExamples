@@ -32,7 +32,7 @@ function build_docker_images() {
 
     echo "Building React UI service..."
     cd $OPEAPATH/GenAIExamples/TextToSql/ui
-    docker build --no-cache -t opea/texttosql-react-ui:latest -f docker/Dockerfile.react .
+    docker build --no-cache -t opea/dbqna-react-ui:latest -f docker/Dockerfile.react .
 
 }
 
@@ -59,7 +59,7 @@ function start_service() {
     sleep 5s
 
     # Run the UI container
-    docker run -d --name="test-texttosql-react-ui-server" --ipc=host -p 5174:80 -e no_proxy=$no_proxy -e https_proxy=$https_proxy -e http_proxy=$http_proxy opea/texttosql-react-ui:latest
+    docker run -d --name="test-dbqna-react-ui-server" --ipc=host -p 5174:80 -e no_proxy=$no_proxy -e https_proxy=$https_proxy -e http_proxy=$http_proxy opea/dbqna-react-ui:latest
 
 }
 

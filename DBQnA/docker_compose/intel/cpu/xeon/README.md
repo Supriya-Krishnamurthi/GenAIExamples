@@ -1,6 +1,6 @@
-# Build Mega Service of Text to Sql Generation on Intel Xeon Processor
+# Deploy DBQnA on Intel Xeon Processor
 
-This document outlines the deployment process for a Text to SQL Generation application utilizing the [GenAIComps](https://github.com/opea-project/GenAIComps.git) microservice pipeline on an Intel Xeon server. The steps include Docker image creation, container deployment via Docker Compose, and service execution to integrate microservices such as `llm`. We will publish the Docker images to Docker Hub soon, which will simplify the deployment process for this service.
+This document outlines the deployment process for a DBQnA application utilizing the [GenAIComps](https://github.com/opea-project/GenAIComps.git) microservice pipeline on an Intel Xeon server. The steps include Docker image creation, container deployment via Docker Compose, and service execution to integrate microservices such as `llm`. We will publish the Docker images to Docker Hub soon, which will simplify the deployment process for this service.
 
 ## 🚀 Apply Intel Xeon Server on AWS
 
@@ -19,7 +19,7 @@ First of all, you need to build Docker Images locally. This step can be ignored 
 ```bash
 git clone https://github.com/opea-project/GenAIComps.git
 cd GenAIComps
-docker build --no-cache -t opea/texttosql:comps -f comps/texttosql/langchain/Dockerfile .
+docker build --no-cache -t opea/texttosql:latest -f comps/texttosql/langchain/Dockerfile .
 
 ```
 
@@ -29,14 +29,14 @@ Build the frontend Docker image based on react framework via below command:
 
 ```bash
 cd GenAIExamples/TextToSql/ui
-docker build --no-cache -t opea/texttosql-react-ui:latest -f docker/Dockerfile.react .
+docker build --no-cache -t opea/dbqna-react-ui:latest -f docker/Dockerfile.react .
 
 ```
 
 Then run the command `docker images`, you will have the following Docker Images:
 
 1. `opea/texttosql:comps`
-2. `opea/texttosql-react-ui:latest`
+2. `opea/dbqna-react-ui:latest`
 
 ## 🚀 Start Microservices
 
@@ -109,13 +109,13 @@ docker run -d --name="test-texttosql-tgi-endpoint" --ipc=host -p $tgi_port:80 -v
 ```bash
 unset http_proxy
 
-docker run -d --name="test-texttosql-server" --ipc=host -p ${texttosql_port}:8090 --ipc=host -e http_proxy=$http_proxy -e https_proxy=$https_proxy -e TGI_LLM_ENDPOINT=$TGI_LLM_ENDPOINT opea/texttosql:comps
+docker run -d --name="test-texttosql-server" --ipc=host -p ${texttosql_port}:8090 --ipc=host -e http_proxy=$http_proxy -e https_proxy=$https_proxy -e TGI_LLM_ENDPOINT=$TGI_LLM_ENDPOINT opea/texttosql:latest
 ```
 
 - Start React UI service
 
 ```bash
-docker run -d --name="test-texttosql-react-ui-server" --ipc=host -p 5174:80 -e no_proxy=$no_proxy -e https_proxy=$https_proxy -e http_proxy=$http_proxy opea/texttosql-react-ui:latest
+docker run -d --name="test-dbqna-react-ui-server" --ipc=host -p 5174:80 -e no_proxy=$no_proxy -e https_proxy=$https_proxy -e http_proxy=$http_proxy opea/dbqna-react-ui:latest
 ```
 
 ## 🚀 Validate Microservices
@@ -167,10 +167,10 @@ npm run test
 
 Open this URL `http://{your_ip}:5174` in your browser to access the frontend.
 
-![project-screenshot](../../../../assets/img/textToSql_ui_init.png)
+![project-screenshot](../../../../assets/img/DBQnA_ui_init.png)
 
 Test DB Connection
-![project-screenshot](../../../../assets/img/textToSql_ui_successful_db_connection.png)
+![project-screenshot](../../../../assets/img/DBQnA_ui_successful_db_connection.png)
 
 Create SQL query and output for given NLP question
-![project-screenshot](../../../../assets/img/textToSql_ui_succesful_sql_output_generation.png)
+![project-screenshot](../../../../assets/img/DBQnA_ui_succesful_sql_output_generation.png)
